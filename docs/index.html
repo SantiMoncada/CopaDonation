@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CopaDonation</title>
+</head>
+
+<body>
+
+    <h1>List of donations</h1>
+    <ul id="listOfDontaions">
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+    </ul>
+    <h1>Donate</h1>
+    <script async src="https://js.stripe.com/v3/buy-button.js">
+    </script>
+
+    <stripe-buy-button buy-button-id="buy_btn_1O3jCdJQy7oGudPMPfAW4X5E"
+        publishable-key="pk_test_51O3hRaJQy7oGudPMe0eCvOsWkgrqbY7Kuik0R1aUdWZzqH7dvyRKNjOAJnh4dAMzAaUaQJo9JWpo7665Cd163wRf00BajbpwQJ">
+    </stripe-buy-button>
+</body>
+<script>
+    //@ts-check
+    const stripeSecretKey = 'rk_test_51O3hRaJQy7oGudPMaSHbrxqbhz89jZrdlIQy9pykN20HrTjcGjsq7hc6lW7bV0g4VX8wxzpYayFGqsC4QMZgLkra00KwRXDrxe';
+
+    const apiUrl = 'https://api.stripe.com/v1/payment_intents';
+    const params = new URLSearchParams({
+        limit: "3"
+    });
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${stripeSecretKey}`
+        }
+    };
+
+    const url = `${apiUrl}?${params.toString()}`;
+
+    fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            const donationsResponse = data.data
+            const list = document.getElementById("listOfDontaions");
+
+            if (!list) return
+
+            for (const donation of donationsResponse) {
+                var li = document.createElement("li");
+                li.innerHTML = "idk" + donation.amount
+                list.appendChild(li)
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+</script>
+
+</html>
