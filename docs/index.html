@@ -21,17 +21,17 @@
 </body>
 <script>
     //@ts-check
-    const stripeSecretKey = 'rk_test_51O3hRaJQy7oGudPMaSHbrxqbhz89jZrdlIQy9pykN20HrTjcGjsq7hc6lW7bV0g4VX8wxzpYayFGqsC4QMZgLkra00KwRXDrxe';
+    const stripeKey = 'rk_test_51O3hRaJQy7oGudPMaSHbrxqbhz89jZrdlIQy9pykN20HrTjcGjsq7hc6lW7bV0g4VX8wxzpYayFGqsC4QMZgLkra00KwRXDrxe';
 
     const apiUrl = 'https://api.stripe.com/v1/payment_intents';
     const params = new URLSearchParams({
-        limit: "3"
+        limit: "3",
     });
 
     const requestOptions = {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${stripeSecretKey}`
+            'Authorization': `Bearer ${stripeKey}`
         }
     };
 
