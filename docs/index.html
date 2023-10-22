@@ -1,68 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CopaDonation</title>
-</head>
+  </head>
 
-<body>
-    <p id="countdown">Countdown: </p>
+  <body>
+    <p id="countdown">Countdown:</p>
     <h1>List of donations</h1>
     <ul id="listOfDontaions"></ul>
     <h1>Donate</h1>
-    <script async src="https://js.stripe.com/v3/buy-button.js">
-    </script>
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 
-    <stripe-buy-button buy-button-id="buy_btn_1O3jCdJQy7oGudPMPfAW4X5E"
-        publishable-key="pk_test_51O3hRaJQy7oGudPMe0eCvOsWkgrqbY7Kuik0R1aUdWZzqH7dvyRKNjOAJnh4dAMzAaUaQJo9JWpo7665Cd163wRf00BajbpwQJ">
+    <stripe-buy-button
+      buy-button-id="buy_btn_1O3jCdJQy7oGudPMPfAW4X5E"
+      publishable-key="pk_test_51O3hRaJQy7oGudPMe0eCvOsWkgrqbY7Kuik0R1aUdWZzqH7dvyRKNjOAJnh4dAMzAaUaQJo9JWpo7665Cd163wRf00BajbpwQJ"
+    >
     </stripe-buy-button>
-</body>
-<script>
+  </body>
+  <script>
     //@ts-check
 
-    function getPayments() {
-        const stripeKey = 'rk_test_51O3hRaJQy7oGudPMaSHbrxqbhz89jZrdlIQy9pykN20HrTjcGjsq7hc6lW7bV0g4VX8wxzpYayFGqsC4QMZgLkra00KwRXDrxe'
+    async function getPayments() {
+      const stripeBaseApi = "https://api.stripe.com/v1";
+      const stripeKey =
+        "rk_test_51O3hRaJQy7oGudPMNpcZFOWzma0AE5zyF1290grVx7u12LvjQAofzO9iwPUS6GXoWuttVqgSyZIC8fPI4zPDd3US00GIXtBJtL";
 
-        const apiUrl = 'https://api.stripe.com/v1/payment_intents'
+      const params = new URLSearchParams({
+        limit: "100",
+      });
+
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${stripeKey}`,
+        },
+      };
+
+      const url = `${stripeBaseApi}/payment_intents?${params.toString()}`;
+
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+
+      const donationsResponse = data.data;
+
+      const paymentIntentsIDs = data.data.map((payment) => payment.id);
+
+      const getDonationsPromises = paymentIntentsIDs.map((intentId) => {
         const params = new URLSearchParams({
-            limit: "3",
-        })
+          limit: "100",
+          payment_intent: intentId,
+        });
 
         const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${stripeKey}`
-            }
-        }
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${stripeKey}`,
+          },
+        };
 
-        const url = `${apiUrl}?${params.toString()}`
+        const url = `${stripeBaseApi}/checkout/sessions?${params.toString()}`;
+        return fetch(url, requestOptions);
+      });
 
-        fetch(url, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
+      const donationsResponses = await Promise.all(getDonationsPromises);
 
-                const donationsResponse = data.data
-                const list = document.getElementById("listOfDontaions")
+      const donationsParsed = await Promise.all(
+        donationsResponses.map((response) => response.json())
+      );
 
-                if (!list) return
+      const donations = donationsParsed.map((donation) => donation.data[0]);
 
-                for (const donation of donationsResponse) {
-                    var li = document.createElement("li")
-                    li.innerHTML = `Amount: ${(donation.amount / 100).toFixed(2)} €`
-                    list.appendChild(li)
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error)
-            });
+      const list = document.getElementById("listOfDontaions");
+
+      if (!list) return;
+
+      for (const donation of donations) {
+        console.log({ donation });
+        var li = document.createElement("li");
+        li.innerHTML = `Amount: ${(donation.amount_total / 100).toFixed(
+          2
+        )} €  message: ${donation.custom_fields[0]?.text.value}`;
+        list.appendChild(li);
+      }
     }
 
-
-    //date for November 9, 2023, 4:00 PM spain in UTC 
-    var partyDate = new Date(Date.UTC(2023, 10, 9, 14, 0, 0))
+    //date for November 9, 2023, 4:00 PM spain in UTC
+    var partyDate = new Date(Date.UTC(2023, 10, 9, 14, 0, 0));
 
     const SECOND = 1000;
     const MINUTE = SECOND * 60;
@@ -70,37 +95,31 @@
     const DAY = HOUR * 24;
 
     function updateTimer() {
+      var now = new Date();
+      var distance = partyDate.getTime() - now.getTime();
+      if (distance < 0) {
+        clearInterval(timer);
+        const cd = document.getElementById("countdown");
 
-        var now = new Date();
-        var distance = partyDate.getTime() - now.getTime();
-        if (distance < 0) {
+        if (cd === null) return;
 
-            clearInterval(timer);
-            const cd = document.getElementById('countdown');
+        cd.innerHTML = "PARTY!";
+        return;
+      }
 
-            if (cd === null) return
+      const days = Math.floor(distance / DAY);
+      const hours = Math.floor((distance % DAY) / HOUR);
+      const minutes = Math.floor((distance % HOUR) / MINUTE);
+      const seconds = Math.floor((distance % MINUTE) / SECOND);
 
-            cd.innerHTML = 'PARTY!'
-            return;
-        }
+      const cd = document.getElementById("countdown");
+      if (cd === null) return;
 
-
-        const days = Math.floor(distance / DAY);
-        const hours = Math.floor((distance % DAY) / HOUR);
-        const minutes = Math.floor((distance % HOUR) / MINUTE);
-        const seconds = Math.floor((distance % MINUTE) / SECOND);
-
-        const cd = document.getElementById('countdown')
-        if (cd === null) return
-
-        cd.innerText = `${days} ${hours}:${minutes}:${seconds}`
+      cd.innerText = `${days} ${hours}:${minutes}:${seconds}`;
     }
 
-
-
-    getPayments()
-    const timer = setInterval(updateTimer, 1000)
-    updateTimer()
-</script>
-
+    getPayments().then();
+    const timer = setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
 </html>
