@@ -14,7 +14,7 @@
     <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 
     <stripe-buy-button
-      buy-button-id="buy_btn_1O3jCdJQy7oGudPMPfAW4X5E"
+      buy-button-id="buy_btn_1O4MNiJQy7oGudPMUTkMRLTt"
       publishable-key="pk_test_51O3hRaJQy7oGudPMe0eCvOsWkgrqbY7Kuik0R1aUdWZzqH7dvyRKNjOAJnh4dAMzAaUaQJo9JWpo7665Cd163wRf00BajbpwQJ"
     >
     </stripe-buy-button>
@@ -77,11 +77,11 @@
       if (!list) return;
 
       for (const donation of donations) {
-        console.log({ donation });
-        var li = document.createElement("li");
-        li.innerHTML = `Amount: ${(donation.amount_total / 100).toFixed(
-          2
-        )} €  message: ${donation.custom_fields[0]?.text.value}`;
+        const ammount = (donation.amount_total / 100).toFixed(2);
+        const message = donation.custom_fields[0]?.text.value;
+
+        const li = document.createElement("li");
+        li.innerHTML = `Amount: ${ammount} €  message: ${message}`;
         list.appendChild(li);
       }
     }
