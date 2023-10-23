@@ -13,11 +13,7 @@
     <h1>Donate</h1>
     <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 
-    <stripe-buy-button
-      buy-button-id="buy_btn_1O4MNiJQy7oGudPMUTkMRLTt"
-      publishable-key="pk_test_51O3hRaJQy7oGudPMe0eCvOsWkgrqbY7Kuik0R1aUdWZzqH7dvyRKNjOAJnh4dAMzAaUaQJo9JWpo7665Cd163wRf00BajbpwQJ"
-    >
-    </stripe-buy-button>
+    <a href="https://donate.stripe.com/test_dR68ySe6JeAJcJGbIL">Donate</a>
   </body>
   <script>
     //@ts-check
@@ -77,11 +73,13 @@
       if (!list) return;
 
       for (const donation of donations) {
+        console.log({ donation });
         const ammount = (donation.amount_total / 100).toFixed(2);
-        const message = donation.custom_fields[0]?.text.value;
+        const message = donation.custom_fields[1]?.text.value;
+        const bootcamp = donation.custom_fields[0]?.dropdown.value;
 
         const li = document.createElement("li");
-        li.innerHTML = `Amount: ${ammount} €  message: ${message}`;
+        li.innerHTML = `${ammount} €  message: ${message} -- ${bootcamp}`;
         list.appendChild(li);
       }
     }
