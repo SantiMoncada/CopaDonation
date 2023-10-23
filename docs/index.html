@@ -113,7 +113,15 @@
       const cd = document.getElementById("countdown");
       if (cd === null) return;
 
-      cd.innerText = `${days} ${hours}:${minutes}:${seconds}`;
+      const minutesLocal = minutes.toLocaleString(undefined, {
+        minimumIntegerDigits: 2,
+      });
+
+      const secondsLocal = seconds.toLocaleString(undefined, {
+        minimumIntegerDigits: 2,
+      });
+
+      cd.innerText = `${days} ${hours}:${minutesLocal}:${secondsLocal}`;
     }
 
     getPayments().then();
