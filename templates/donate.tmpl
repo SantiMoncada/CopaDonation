@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CopaDonation</title>
-    <link rel="stylesheet" href="assets/index.css" />
-  </head>
 
-  <body>
-    <p id="countdown">Countdown:</p>
-    <h1>List of donations</h1>
-    <ul id="listOfDontaions">
-      {{
-        range.payments
-      }}
-      <li>{{.Amount}}</li>
-      {{
-        end
-      }}
-    </ul>
-    <h1>Donate</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copa Donation</title>
+  <link rel="stylesheet" href="assets/index.css" />
+</head>
 
-    <a href="https://donate.stripe.com/test_dR68ySe6JeAJcJGbIL">Donate</a>
-  </body>
-  <script type="text/javascript" src="assets/index.js"></script>
+<body>
+  <p id="countdown">Countdown:</p>
+  <h1>List of donations</h1>
+  <ul id="listOfDontaions">
+    {{
+    range.donations
+    }}
+    <li>{{.Amount}} € message: {{.Message}} -- {{.Bootcamp}}</li>
+    {{
+    end
+    }}
+  </ul>
+  <h1>Donate</h1>
+
+  <a href="https://donate.stripe.com/test_dR68ySe6JeAJcJGbIL">Donate</a>
+</body>
+<script type="text/javascript" src="assets/index.js"></script>
+
 </html>

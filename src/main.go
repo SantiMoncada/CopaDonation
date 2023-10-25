@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,21 +14,11 @@ func main() {
 
 	router.Static("/assets", "./assets")
 
-	paymentIntents := getPaymentIntents()
-
-	type templateDataType struct {
-		Amounts []string
-	}
-
-	var templateData templateDataType
-
-	for _, val := range paymentIntents {
-		templateData.Amounts = append(templateData.Amounts, fmt.Sprintf("%d.%d", val.Amount/100, int(math.Mod(float64(val.Amount), 100))))
-	}
-
+	donations := getAllDonations()
+	fmt.Printf("%+v\n", donations)
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "donate.tmpl", gin.H{
-			"payments": paymentIntents,
+			"donations": donations,
 		})
 	})
 	router.Run(":8080")
