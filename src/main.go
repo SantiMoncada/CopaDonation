@@ -20,7 +20,7 @@ func main() {
 
 	donations = getAllDonations()
 
-	fmt.Printf("%v/n", donations)
+	fmt.Printf("%v\n", donations)
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "donate.tmpl", gin.H{
@@ -57,25 +57,23 @@ func main() {
 		var stripeWebhookData stripeWebhookResponse
 		json.Unmarshal(jsonData, &stripeWebhookData)
 
-		var message string
-		var bootcamp string
-		var ammount string
+		var newDonation donation
 
 		for _, custom_field := range stripeWebhookData.Data.Object.CustomFields {
 			if custom_field.Key == "bootcamp" {
-				bootcamp = custom_field.Dropdown.Value
+				newDonation.Bootcamp = custom_field.Dropdown.Value
 				continue
 			}
 
 			if custom_field.Key == "messageforthefeed" {
-				message = custom_field.Text.Value
+				newDonation.Message = custom_field.Text.Value
 				continue
 			}
 		}
 
-		ammount = fmt.Sprintf("%d.%s", stripeWebhookData.Data.Object.Amount/100, toFixed2(stripeWebhookData.Data.Object.Amount%100))
+		newDonation.Amount = fmt.Sprintf("%d.%s", stripeWebhookData.Data.Object.Amount/100, toFixed2(stripeWebhookData.Data.Object.Amount%100))
 
-		donations = append(donations, donation{ammount, message, bootcamp})
+		donations = append(donations, newDonation)
 	})
 
 	router.Run(":8080")

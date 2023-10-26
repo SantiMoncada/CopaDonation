@@ -126,26 +126,23 @@ func getAllDonations() []donation {
 	var output []donation
 
 	for _, session := range sessions {
-		var message string
-		var bootcamp string
-		var ammount string
+		var newDonation donation
 
 		for _, custom_field := range session.CustomFields {
 			if custom_field.Key == "bootcamp" {
-				bootcamp = custom_field.Dropdown.Value
+				newDonation.Bootcamp = custom_field.Dropdown.Value
 				continue
 			}
 
 			if custom_field.Key == "messageforthefeed" {
-				message = custom_field.Text.Value
+				newDonation.Message = custom_field.Text.Value
 				continue
 			}
-
 		}
 
-		ammount = fmt.Sprintf("%d.%s", session.Amount/100, toFixed2(session.Amount%100))
+		newDonation.Amount = fmt.Sprintf("%d.%s", session.Amount/100, toFixed2(session.Amount%100))
 
-		output = append(output, donation{ammount, message, bootcamp})
+		output = append(output, newDonation)
 	}
 
 	return output
