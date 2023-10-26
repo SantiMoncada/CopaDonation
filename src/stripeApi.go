@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -70,7 +71,7 @@ type checkoutSession struct {
 	} `json:"custom_fields"`
 }
 
-func getSessionData(id string) checkoutSession {
+func getSessionData(id string) (checkoutSession, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/checkout/sessions?payment_intent=%s", baseApi, id), nil)
 
 	if err != nil {
@@ -96,7 +97,12 @@ func getSessionData(id string) checkoutSession {
 
 	json.Unmarshal(responseData, &jsonResponse)
 
-	return jsonResponse.Data[0]
+	fmt.Printf("%v\n", jsonResponse)
+	if len(jsonResponse.Data) < 1 {
+		return checkoutSession{}, errors.New("no checkout found")
+	}
+
+	return jsonResponse.Data[0], nil
 }
 
 type donation struct {
@@ -111,7 +117,10 @@ func getAllDonations() []donation {
 	intents := getPaymentIntents()
 
 	for _, intent := range intents {
-		sessions = append(sessions, getSessionData(intent.Id))
+		checkoutSession, err := getSessionData(intent.Id)
+		if err == nil {
+			sessions = append(sessions, checkoutSession)
+		}
 	}
 
 	var output []donation
@@ -134,10 +143,18 @@ func getAllDonations() []donation {
 
 		}
 
-		ammount = fmt.Sprintf("%d.%d", session.Amount/100, session.Amount%100)
+		ammount = fmt.Sprintf("%d.%s", session.Amount/100, toFixed2(session.Amount%100))
 
 		output = append(output, donation{ammount, message, bootcamp})
 	}
 
 	return output
+}
+
+func toFixed2(n int) string {
+	if n <= 9 {
+		return fmt.Sprintf("%d0", n)
+	}
+
+	return fmt.Sprintf("%d", n)
 }
