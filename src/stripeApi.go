@@ -122,6 +122,7 @@ func getAllDonations() []donation {
 
 	intents := getPaymentIntents()
 
+	// this shit needs to be concurrent
 	for _, intent := range intents {
 		checkoutSession, err := getSessionData(intent.Id)
 		if err == nil {
