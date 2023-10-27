@@ -69,6 +69,10 @@ type checkoutSession struct {
 			Value string `json:"value"`
 		} `json:"text"`
 	} `json:"custom_fields"`
+	CustomerDetails struct {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	} `json:"customer_details"`
 }
 
 func getSessionData(id string) (checkoutSession, error) {
@@ -109,6 +113,8 @@ type donation struct {
 	Amount   string
 	Message  string
 	Bootcamp string
+	Name     string
+	Currency string
 }
 
 func getAllDonations() []donation {
@@ -126,23 +132,7 @@ func getAllDonations() []donation {
 	var output []donation
 
 	for _, session := range sessions {
-		var newDonation donation
-
-		for _, custom_field := range session.CustomFields {
-			if custom_field.Key == "bootcamp" {
-				newDonation.Bootcamp = custom_field.Dropdown.Value
-				continue
-			}
-
-			if custom_field.Key == "messageforthefeed" {
-				newDonation.Message = custom_field.Text.Value
-				continue
-			}
-		}
-
-		newDonation.Amount = fmt.Sprintf("%d.%s", session.Amount/100, toFixed2(session.Amount%100))
-
-		output = append(output, newDonation)
+		output = append(output, sessionToDonation(session))
 	}
 
 	return output
@@ -154,4 +144,34 @@ func toFixed2(n int) string {
 	}
 
 	return fmt.Sprintf("%d", n)
+}
+
+type stripeWebhookResponse struct {
+	Created int `json:"created"`
+	Data    struct {
+		Object checkoutSession `json:"object"`
+	} `json:"data"`
+}
+
+func sessionToDonation(session checkoutSession) donation {
+	var donation donation
+
+	for _, custom_field := range session.CustomFields {
+		if custom_field.Key == "bootcamp" {
+			donation.Bootcamp = custom_field.Dropdown.Value
+			continue
+		}
+
+		if custom_field.Key == "messageforthefeed" {
+			donation.Message = custom_field.Text.Value
+			continue
+		}
+	}
+
+	donation.Amount = fmt.Sprintf("%d.%s", session.Amount/100, toFixed2(session.Amount%100))
+
+	donation.Name = session.CustomerDetails.Name
+	donation.Currency = session.Currency
+
+	return donation
 }

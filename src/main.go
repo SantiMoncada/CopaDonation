@@ -28,52 +28,19 @@ func main() {
 		})
 	})
 
-	type stripeWebhookResponse struct {
-		Created int `json:"created"`
-		Data    struct {
-			Object struct {
-				Amount       int    `json:"amount_total"`
-				Created      int    `json:"created"`
-				Currency     string `json:"currency"`
-				CustomFields []struct {
-					Key      string `json:"key"`
-					Dropdown struct {
-						Value string `json:"value"`
-					} `json:"dropdown"`
-					Text struct {
-						Value string `json:"value"`
-					} `json:"text"`
-				} `json:"custom_fields"`
-			} `json:"object"`
-		} `json:"data"`
-	}
-
 	router.POST("/webhook", func(c *gin.Context) {
 		jsonData, err := io.ReadAll(c.Request.Body)
-		if err == nil {
+		if err != nil {
 			fmt.Printf("Error reading webhook")
 		}
 
 		var stripeWebhookData stripeWebhookResponse
+
 		json.Unmarshal(jsonData, &stripeWebhookData)
 
-		var newDonation donation
+		var newDonation = sessionToDonation(stripeWebhookData.Data.Object)
 
-		for _, custom_field := range stripeWebhookData.Data.Object.CustomFields {
-			if custom_field.Key == "bootcamp" {
-				newDonation.Bootcamp = custom_field.Dropdown.Value
-				continue
-			}
-
-			if custom_field.Key == "messageforthefeed" {
-				newDonation.Message = custom_field.Text.Value
-				continue
-			}
-		}
-
-		newDonation.Amount = fmt.Sprintf("%d.%s", stripeWebhookData.Data.Object.Amount/100, toFixed2(stripeWebhookData.Data.Object.Amount%100))
-
-		donations = append(donations, newDonation)
+		donations = append([]donation{newDonation}, donations...)
 	})
 
 	router.Run(":8080")
