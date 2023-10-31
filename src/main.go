@@ -32,6 +32,7 @@ func main() {
 		jsonData, err := io.ReadAll(c.Request.Body)
 		if err != nil {
 			fmt.Printf("Error reading webhook")
+			return
 		}
 
 		var stripeWebhookData stripeWebhookResponse

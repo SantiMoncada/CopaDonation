@@ -1,0 +1,19 @@
+{
+  "name": "copadonation",
+  "version": "1.0.0",
+  "description": "Scripts for copadonation templates",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "dev": "webpack --watch --config webpack.config.js"
+  },
+  "author": "Santi",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
