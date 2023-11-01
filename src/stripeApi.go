@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"sync"
 )
 
 const baseApi = "https://api.stripe.com/v1"
@@ -51,6 +52,8 @@ func getPaymentIntents() []paymentIntent {
 	var jsonResponse stripeResponse[paymentIntent]
 
 	json.Unmarshal(responseData, &jsonResponse)
+
+	fmt.Printf("%v\n", jsonResponse.Data)
 
 	return jsonResponse.Data
 }
@@ -102,6 +105,7 @@ func getSessionData(id string) (checkoutSession, error) {
 	json.Unmarshal(responseData, &jsonResponse)
 
 	fmt.Printf("%v\n", jsonResponse)
+
 	if len(jsonResponse.Data) < 1 {
 		return checkoutSession{}, errors.New("no checkout found")
 	}
@@ -117,18 +121,32 @@ type donation struct {
 	Currency string
 }
 
+var WaitGroup sync.WaitGroup
+var sessions []checkoutSession
+
+func getDonationThread(id string, index int) {
+
+	checkoutSession, err := getSessionData(id)
+	if err == nil {
+		sessions[index] = checkoutSession
+	}
+
+	WaitGroup.Done()
+}
+
 func getAllDonations() []donation {
-	var sessions []checkoutSession
 
 	intents := getPaymentIntents()
 
-	// this shit needs to be concurrent
-	for _, intent := range intents {
-		checkoutSession, err := getSessionData(intent.Id)
-		if err == nil {
-			sessions = append(sessions, checkoutSession)
-		}
+	sessions = make([]checkoutSession, len(intents))
+
+	WaitGroup.Add(len(intents))
+
+	for index, intent := range intents {
+		go getDonationThread(intent.Id, index)
 	}
+
+	WaitGroup.Wait()
 
 	var output []donation
 
