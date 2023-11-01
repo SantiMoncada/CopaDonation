@@ -46,7 +46,7 @@ func main() {
 
 		json.Unmarshal(jsonData, &stripeWebhookData)
 
-		var newDonation = sessionToDonation(stripeWebhookData.Data.Object)
+		var newDonation = stripeWebhookData.Data.Object.ToDonation()
 
 		donations = append([]donation{newDonation}, donations...)
 	})

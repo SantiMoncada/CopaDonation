@@ -20,10 +20,76 @@ type stripeResponse[T any] struct {
 	Url     string `json:"url"`
 }
 
+type stripeWebhookResponse struct {
+	Created int `json:"created"`
+	Data    struct {
+		Object checkoutSession `json:"object"`
+	} `json:"data"`
+}
+
 type paymentIntent struct {
 	Id      string `json:"id"`
 	Amount  int    `json:"amount"`
 	Created int    `json:"created"`
+}
+
+type checkoutSession struct {
+	Id           string `json:"id"`
+	Amount       int    `json:"amount_total"`
+	Created      int    `json:"created"`
+	Currency     string `json:"currency"`
+	CustomFields []struct {
+		Key      string `json:"key"`
+		Dropdown struct {
+			Value string `json:"value"`
+		} `json:"dropdown"`
+		Text struct {
+			Value string `json:"value"`
+		} `json:"text"`
+	} `json:"custom_fields"`
+	CustomerDetails struct {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	} `json:"customer_details"`
+}
+type donation struct {
+	Amount   string
+	Message  string
+	Bootcamp string
+	Name     string
+	Currency string
+}
+
+func (cs *checkoutSession) ToDonation() donation {
+	var donation donation
+
+	for _, custom_field := range cs.CustomFields {
+		if custom_field.Key == "bootcamp" {
+			donation.Bootcamp = custom_field.Dropdown.Value
+			continue
+		}
+
+		if custom_field.Key == "messageforthefeed" {
+			donation.Message = custom_field.Text.Value
+			continue
+		}
+	}
+
+	toFixed2 := func(n int) string {
+		if n <= 9 {
+			return fmt.Sprintf("%d0", n)
+		}
+
+		return fmt.Sprintf("%d", n)
+	}
+
+	donation.Amount = fmt.Sprintf("%d.%s", cs.Amount/100, toFixed2(cs.Amount%100))
+
+	donation.Name = cs.CustomerDetails.Name
+	donation.Currency = cs.Currency
+
+	return donation
+
 }
 
 func getPaymentIntents() []paymentIntent {
@@ -56,26 +122,6 @@ func getPaymentIntents() []paymentIntent {
 	fmt.Printf("%v\n", jsonResponse.Data)
 
 	return jsonResponse.Data
-}
-
-type checkoutSession struct {
-	Id           string `json:"id"`
-	Amount       int    `json:"amount_total"`
-	Created      int    `json:"created"`
-	Currency     string `json:"currency"`
-	CustomFields []struct {
-		Key      string `json:"key"`
-		Dropdown struct {
-			Value string `json:"value"`
-		} `json:"dropdown"`
-		Text struct {
-			Value string `json:"value"`
-		} `json:"text"`
-	} `json:"custom_fields"`
-	CustomerDetails struct {
-		Name  string `json:"name"`
-		Email string `json:"email"`
-	} `json:"customer_details"`
 }
 
 func getSessionData(id string) (checkoutSession, error) {
@@ -113,28 +159,20 @@ func getSessionData(id string) (checkoutSession, error) {
 	return jsonResponse.Data[0], nil
 }
 
-type donation struct {
-	Amount   string
-	Message  string
-	Bootcamp string
-	Name     string
-	Currency string
-}
-
-var WaitGroup sync.WaitGroup
-var sessions []checkoutSession
-
-func getDonationThread(id string, index int) {
-
-	checkoutSession, err := getSessionData(id)
-	if err == nil {
-		sessions[index] = checkoutSession
-	}
-
-	WaitGroup.Done()
-}
-
 func getAllDonations() []donation {
+
+	var WaitGroup sync.WaitGroup
+	var sessions []checkoutSession
+
+	getDonationThread := func(id string, index int) {
+
+		checkoutSession, err := getSessionData(id)
+		if err == nil {
+			sessions[index] = checkoutSession
+		}
+
+		WaitGroup.Done()
+	}
 
 	intents := getPaymentIntents()
 
@@ -151,46 +189,8 @@ func getAllDonations() []donation {
 	var output []donation
 
 	for _, session := range sessions {
-		output = append(output, sessionToDonation(session))
+		output = append(output, session.ToDonation())
 	}
 
 	return output
-}
-
-func toFixed2(n int) string {
-	if n <= 9 {
-		return fmt.Sprintf("%d0", n)
-	}
-
-	return fmt.Sprintf("%d", n)
-}
-
-type stripeWebhookResponse struct {
-	Created int `json:"created"`
-	Data    struct {
-		Object checkoutSession `json:"object"`
-	} `json:"data"`
-}
-
-func sessionToDonation(session checkoutSession) donation {
-	var donation donation
-
-	for _, custom_field := range session.CustomFields {
-		if custom_field.Key == "bootcamp" {
-			donation.Bootcamp = custom_field.Dropdown.Value
-			continue
-		}
-
-		if custom_field.Key == "messageforthefeed" {
-			donation.Message = custom_field.Text.Value
-			continue
-		}
-	}
-
-	donation.Amount = fmt.Sprintf("%d.%s", session.Amount/100, toFixed2(session.Amount%100))
-
-	donation.Name = session.CustomerDetails.Name
-	donation.Currency = session.Currency
-
-	return donation
 }
