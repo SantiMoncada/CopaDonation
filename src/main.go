@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,12 @@ import (
 var donations []donation
 
 func main() {
+	if len(os.Args) > 1 {
+		if os.Args[1] == "release" {
+			gin.SetMode(gin.ReleaseMode)
+		}
+	}
+
 	router := gin.Default()
 
 	router.LoadHTMLGlob("templates/*.tmpl")
