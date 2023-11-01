@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Copa Donation</title>
+    <link rel="stylesheet" href="assets/index.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Copa Donation</title>
-  <link rel="stylesheet" href="assets/index.css" />
-</head>
+  <body>
+    <p id="countdown">0 00:00:00</p>
+    <h1>List of donations</h1>
+    <ul id="listOfDontaions">
+      {{
+        range.donations
+      }}
+      <li>{{.Name}}: {{.Amount}} € message: {{.Message}} -- {{.Bootcamp}}</li>
+      {{
+        end
+      }}
+    </ul>
+    <h1>Donate</h1>
 
-<body>
-  <p id="countdown">0 00:00:00</p>
-  <h1>List of donations</h1>
-  <ul id="listOfDontaions">
-    {{
-    range.donations
-    }}
-    <li>{{.Name}}: {{.Amount}} € message: {{.Message}} -- {{.Bootcamp}}</li>
-    {{
-    end
-    }}
-  </ul>
-  <h1>Donate</h1>
-
-  <a href="https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c">Donate</a>
-</body>
-<script type="text/javascript" src="assets/index.js"></script>
-
+    <a href="https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c">Donate</a>
+  </body>
+  <script type="text/javascript" src="assets/scripts/index.js"></script>
 </html>
