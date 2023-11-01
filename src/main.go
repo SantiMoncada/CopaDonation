@@ -23,7 +23,7 @@ func main() {
 
 	router.LoadHTMLGlob("templates/*.tmpl")
 
-	router.Static("/assets", "./assets")
+	router.Static("/public", "./public")
 
 	donations = getAllDonations()
 

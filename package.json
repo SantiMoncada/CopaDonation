@@ -10,7 +10,7 @@
     "start": "./ServerExecutable release",
     "go:install":"go mod tidy",
     "build": "go build -o ServerExecutable src/*.go &&  webpack --config webpack.config.js",
-    "dev": "concurrently --kill-others \"webpack --watch --config webpack.config.js\" \"nodemon --exec go run src/*.go --signal SIGTERM\""
+    "dev": "concurrently --kill-others \"webpack --watch --config webpack.config.js\" \"nodemon --exec go run src/*.go --watch 'src/**/*' --signal SIGTERM\""
   },
   "author": "Santi",
   "license": "ISC",
