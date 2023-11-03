@@ -12,6 +12,8 @@ import (
 
 var donations []donation
 
+var total float64 = 0
+
 func main() {
 	if len(os.Args) > 1 {
 		if os.Args[1] == "release" {
@@ -28,8 +30,6 @@ func main() {
 	donations = getAllDonations()
 
 	fmt.Printf("%v\n", donations)
-
-	total := 0.0
 
 	for _, donation := range donations {
 		total += donation.AmountNumber
@@ -56,6 +56,12 @@ func main() {
 		var newDonation = stripeWebhookData.Data.Object.ToDonation()
 
 		donations = append([]donation{newDonation}, donations...)
+		total += newDonation.AmountNumber
+
+		c.HTML(http.StatusCreated, "donate.tmpl", gin.H{
+			"donations": donations,
+			"total":     fmt.Sprintf("%.2f", total),
+		})
 	})
 
 	router.Run(":8080")
