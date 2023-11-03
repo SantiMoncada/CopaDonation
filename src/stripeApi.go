@@ -53,11 +53,12 @@ type checkoutSession struct {
 	} `json:"customer_details"`
 }
 type donation struct {
-	Amount   string
-	Message  string
-	Bootcamp string
-	Name     string
-	Currency string
+	AmountNumber float64
+	Amount       string
+	Message      string
+	Bootcamp     string
+	Name         string
+	Currency     string
 }
 
 func (cs *checkoutSession) ToDonation() donation {
@@ -75,15 +76,8 @@ func (cs *checkoutSession) ToDonation() donation {
 		}
 	}
 
-	toFixed2 := func(n int) string {
-		if n <= 9 {
-			return fmt.Sprintf("%d0", n)
-		}
-
-		return fmt.Sprintf("%d", n)
-	}
-
-	donation.Amount = fmt.Sprintf("%d.%s", cs.Amount/100, toFixed2(cs.Amount%100))
+	donation.Amount = fmt.Sprintf("%.2f", float64(cs.Amount)/100)
+	donation.AmountNumber = float64(cs.Amount) / 100
 
 	donation.Name = cs.CustomerDetails.Name
 	donation.Currency = cs.Currency
