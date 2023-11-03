@@ -1,6 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: Geist-regular;
-  src: url("./fonts/Geist/Geist-Regular.woff2");
+  src: url("./../fonts/Geist/Geist-Regular.woff2");
 }
 
 body {
