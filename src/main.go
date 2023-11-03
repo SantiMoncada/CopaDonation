@@ -29,9 +29,16 @@ func main() {
 
 	fmt.Printf("%v\n", donations)
 
+	total := 0.0
+
+	for _, donation := range donations {
+		total += donation.AmountNumber
+	}
+
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "donate.tmpl", gin.H{
 			"donations": donations,
+			"total":     fmt.Sprintf("%.2f", total),
 		})
 	})
 
