@@ -1,41 +1,53 @@
 //@ts-check
-import Chart from 'chart.js/auto';
+import {
+  Chart,
+  BarController,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
+
+Chart.register(BarController, CategoryScale, LinearScale, BarElement);
 
 export const setUpChart = () => {
   const xValues = [55, 49, 44, 24, 15];
-  const yValues = ['WEB', 'UX/UI', 'DATA'];
-  const barColors = ['rgb(253, 224, 71)', 'rgb(192, 132, 252)', 'rgb(134, 239, 172)'];
+  const yValues = ["WEB", "UX/UI", "DATA"];
+  const barColors = [
+    "rgb(253, 224, 71)",
+    "rgb(192, 132, 252)",
+    "rgb(134, 239, 172)",
+  ];
 
-  new Chart('myChart', {
-    type: 'bar',
+  new Chart("myChart", {
+    type: "bar",
     data: {
       labels: yValues,
       datasets: [
         {
           backgroundColor: barColors,
-          data: xValues
-        }
-      ]
+          data: xValues,
+        },
+      ],
     },
     options: {
-      indexAxis: 'y',
+      indexAxis: "y",
       plugins: {
         legend: {
-          display: false
-        }
+          display: false,
+        },
       },
       responsive: true,
       maintainAspectRatio: false,
       scales: {
         y: {
-          stacked: true
+          stacked: true,
         },
         x: {
           grid: {
-            display: false
-          }
-        }
-      }
-    }
+            display: false,
+          },
+        },
+      },
+    },
   });
 };

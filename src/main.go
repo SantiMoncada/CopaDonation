@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 
@@ -13,6 +14,10 @@ import (
 var donations []donation
 
 var total float64 = 0
+
+var channelCount uint64 = 0
+
+var streamChannels = make(map[uint64]chan donation)
 
 func main() {
 	if len(os.Args) > 1 {
@@ -62,7 +67,42 @@ func main() {
 			"donations": donations,
 			"total":     fmt.Sprintf("%.2f", total),
 		})
+
+		for _, channel := range streamChannels {
+			channel <- newDonation
+		}
+
 	})
 
-	router.Run(":8080")
+	router.GET("/event-stream", func(c *gin.Context) {
+		var id = channelCount
+		channelCount++
+
+		ch := make(chan donation)
+
+		streamChannels[id] = ch
+
+		c.Stream(func(w io.Writer) bool {
+			msg, ok := <-ch
+			if ok {
+				c.SSEvent("message", msg)
+				return true
+			}
+			return false
+		})
+
+		close(streamChannels[id])
+		delete(streamChannels, id)
+	})
+
+	// router.POST("/test-stream", func(c *gin.Context) {
+
+	// 	for index, channel := range streamChannels {
+
+	// 		fmt.Printf(fmt.Sprintf("sending event to id:%d\n", index))
+	// 		channel <- donations
+	// 	}
+	// })
+
+	log.Fatalf("error running HTTP server: %s\n", router.Run(":8080"))
 }
