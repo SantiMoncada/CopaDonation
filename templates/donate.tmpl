@@ -8,25 +8,46 @@
   </head>
 
   <body>
-    <h1 class="text-4xl text-blue-700">My Webpack + Tailwind App</h1>
-    <p id="countdown">0 00:00:00</p>
-    <h1>List of donations</h1>
-    <ul id="listOfDontaions">
-      {{
-        range.donations
-      }}
-      <li>{{.Name}}: {{.Amount}} € message: {{.Message}} -- {{.Bootcamp}}</li>
-      {{
-        end
-      }}
-    </ul>
+    <section class="flex justify-center px-10">
+      <div class="flex flex-col justify-center items-center mt-14 gap-10">
+        <div class="flex flex-col text-center gap-4">
+          <h1 class="text-5xl font-black text-yellow-300 text-title-br-shadow">MID BOOTCAMP</h1>
+          <p class="text-5xl font-semibold text-purple-400 text-br-yellow-shadow" id="countdown">
+            00:00:00
+          </p>
+        </div>
 
-    <h1>Donate</h1>
+        <div
+          class="flex justify-center w-[80vw] border-2 border-solid border-green-300 transform rotate-2">
+          <div
+            class="flex justify-center w-[80vw] p-4 border-2 border-solid border-yellow-300 transform -rotate-2">
+            <canvas id="myChart" style="width: 80%"></canvas>
+          </div>
+        </div>
+        <div class="flex justify-end align-middle">
+          <h2 class="text-5xl bote">Bote: {{.total}}€</h2>
+        </div>
 
-    <a href="https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c">Donate</a>
+        <a
+          class="flex justify-center border-2 border-solid border-yellow-300 transform rotate-2"
+          href="https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c">
+          <div
+            class="flex justify-center px-8 py-3 border-2 border-solid border-purple-400 transform -rotate-2">
+            <p class="text-4xl font-black cursor dona">Dona aquí</p>
+          </div>
+        </a>
 
-    <h1>bote</h1>
-    {{.total}}
+        <ul id="listOfDontaions">
+          {{
+            range.donations
+          }}
+          <li>{{.Name}}: {{.Amount}} € message: {{.Message}} -- {{.Bootcamp}}</li>
+          {{
+            end
+          }}
+        </ul>
+      </div>
+    </section>
   </body>
   <script type="text/javascript" src="public/dist/index.js"></script>
 </html>
