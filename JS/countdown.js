@@ -13,31 +13,30 @@ export default () => {
     var distance = partyDate.getTime() - now.getTime();
     if (distance < 0) {
       clearInterval(timer);
-      const cd = document.getElementById("countdown");
+      const cd = document.getElementById('countdown');
 
       if (cd === null) return;
 
-      cd.innerHTML = "PARTY!";
+      cd.innerHTML = 'PARTY!';
       return;
     }
 
-    const days = Math.floor(distance / DAY);
-    const hours = Math.floor((distance % DAY) / HOUR);
+    const hours = Math.floor(distance / HOUR);
     const minutes = Math.floor((distance % HOUR) / MINUTE);
     const seconds = Math.floor((distance % MINUTE) / SECOND);
 
-    const cd = document.getElementById("countdown");
+    const cd = document.getElementById('countdown');
     if (cd === null) return;
 
     const minutesLocal = minutes.toLocaleString(undefined, {
-      minimumIntegerDigits: 2,
+      minimumIntegerDigits: 2
     });
 
     const secondsLocal = seconds.toLocaleString(undefined, {
-      minimumIntegerDigits: 2,
+      minimumIntegerDigits: 2
     });
 
-    cd.innerText = `${days} ${hours}:${minutesLocal}:${secondsLocal}`;
+    cd.innerText = `${hours}:${minutesLocal}:${secondsLocal}`;
   }
 
   updateTimer();

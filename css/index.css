@@ -2,7 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import url('https://matiaslescano.com.ar/static/fonts/pixelicious.css'); */
+
 body {
-  font-family: sans-serif;
-  background-color: rgb(130, 224, 72);
+  font-family: Pixelicious, monospace;
+  background-color: rgb(33, 33, 33);
+}
+
+.bote {
+  color: transparent;
+  filter: blur(0.3px);
+  animation: 4s ease-in-out infinite alternate pulse;
+}
+
+.dona {
+  color: transparent;
+  filter: blur(0.3px);
+  animation: 4s ease-in-out infinite alternate rainbow;
+}
+
+.text-title-br-shadow {
+  text-shadow: 0 3px rgb(134, 239, 172), 3px 0 rgb(192, 132, 252);
+}
+
+.text-br-green-shadow {
+  text-shadow: 0 3px rgb(134, 239, 172), 3px 0 rgb(134, 239, 172);
+}
+
+.text-br-purple-shadow {
+  text-shadow: 0 3px rgb(192, 132, 252), 3px 0 rgb(192, 132, 252);
+}
+
+.text-br-yellow-shadow {
+  text-shadow: 0 3px rgb(253, 224, 71), 3px 0 rgb(253, 224, 71);
+}
+
+@keyframes pulse {
+  0% {
+    text-shadow: rgba(255, 255, 255, 0.9) -0.06em -0.06em, rgba(67, 144, 126, 0.9) 0 0;
+  }
+
+  33% {
+    text-shadow: rgba(134, 239, 172, 0.9) -0.15em -0.15em, rgba(197, 147, 252, 0.9) 0 0;
+  }
+
+  66% {
+    text-shadow: rgba(146, 239, 172, 0.9) -0.06em -0.06em, rgba(197, 147, 252, 0.9) 0 0;
+  }
+
+  100% {
+    text-shadow: rgba(134, 239, 172, 0.9) -0.15em -0.15em, rgba(192, 132, 252, 0.9) 0 0;
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    text-shadow: rgba(255, 255, 255, 0.9) 0 0, 0 3px rgb(192, 132, 252), 3px 0 rgb(192, 132, 252);
+  }
+
+  33% {
+    text-shadow: rgba(146, 239, 172) 0 0, 0 3px rgb(253, 224, 71), 3px 0 rgb(253, 224, 71);
+  }
+
+  66% {
+    text-shadow: rgb(253, 224, 71, 0.9) 0 0, 0 3px rgb(192, 132, 252), 3px 0 rgb(192, 132, 252);
+  }
+
+  100% {
+    text-shadow: rgba(192, 132, 252, 0.9) 0 0, 0 3px rgb(255, 255, 255), 3px 0 rgb(255, 255, 255);
+  }
 }
