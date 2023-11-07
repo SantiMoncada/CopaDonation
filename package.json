@@ -9,6 +9,7 @@
   "scripts": {
     "start": "./ServerExecutable release",
     "go:install": "go mod tidy",
+    "webpack:build": "webpack --config webpack.config.js",
     "build": "go build -o ServerExecutable src/*.go &&  webpack --config webpack.config.js",
     "dev": "concurrently --kill-others \"webpack --watch --config webpack.config.js\" \"nodemon --exec go run src/*.go --watch 'src/**/*' --signal SIGTERM\""
   },
