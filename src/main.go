@@ -23,8 +23,18 @@ var uxTotal float64 = 0
 var dataTotal float64 = 0
 
 var streamChannels = make(map[uuid.UUID]chan donation)
+var stripeKey = os.Getenv("STRIPE_API_KEY")
+var stripeDonateLink = os.Getenv("STRIPE_DONATION_LINK")
 
 func main() {
+
+	if stripeDonateLink == "" {
+		stripeDonateLink = "https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c"
+	}
+	if stripeKey == "" {
+		stripeKey = "rk_test_51O3hRaJQy7oGudPMNpcZFOWzma0AE5zyF1290grVx7u12LvjQAofzO9iwPUS6GXoWuttVqgSyZIC8fPI4zPDd3US00GIXtBJtL"
+	}
+
 	if len(os.Args) > 1 {
 		if os.Args[1] == "release" {
 			gin.SetMode(gin.ReleaseMode)
@@ -54,11 +64,12 @@ func main() {
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "donate.tmpl", gin.H{
-			"donations": donations,
-			"total":     fmt.Sprintf("%.2f", total),
-			"webTotal":  webTotal,
-			"uxTotal":   uxTotal,
-			"dataTotal": dataTotal,
+			"donateLink": stripeDonateLink,
+			"donations":  donations,
+			"total":      fmt.Sprintf("%.2f", total),
+			"webTotal":   webTotal,
+			"uxTotal":    uxTotal,
+			"dataTotal":  dataTotal,
 		})
 	})
 
@@ -88,11 +99,12 @@ func main() {
 		}
 
 		c.HTML(http.StatusCreated, "donate.tmpl", gin.H{
-			"donations": donations,
-			"total":     fmt.Sprintf("%.2f", total),
-			"webTotal":  webTotal,
-			"uxTotal":   uxTotal,
-			"dataTotal": dataTotal,
+			"donateLink": stripeDonateLink,
+			"donations":  donations,
+			"total":      fmt.Sprintf("%.2f", total),
+			"webTotal":   webTotal,
+			"uxTotal":    uxTotal,
+			"dataTotal":  dataTotal,
 		})
 
 		for _, channel := range streamChannels {
