@@ -1,6 +1,9 @@
 //@ts-check
-import '../css/index.css';
-import { setUpChart } from './chart';
-import countdown from './countdown';
+import "../css/index.css";
+import setUpChart from "./chart";
+import countdown from "./countdown";
+import eventStreamHandler from "./eventStreamHandler";
+
 countdown();
-setUpChart();
+const chartJsRef = setUpChart();
+eventStreamHandler(chartJsRef);
