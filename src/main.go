@@ -9,15 +9,14 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 var donations []donation
 
 var total float64 = 0
 
-var channelCount uint64 = 0
-
-var streamChannels = make(map[uint64]chan donation)
+var streamChannels = make(map[uuid.UUID]chan donation)
 
 func main() {
 	if len(os.Args) > 1 {
@@ -75,8 +74,7 @@ func main() {
 	})
 
 	router.GET("/event-stream", func(c *gin.Context) {
-		var id = channelCount
-		channelCount++
+		id := uuid.New()
 
 		ch := make(chan donation)
 
@@ -94,15 +92,6 @@ func main() {
 		close(streamChannels[id])
 		delete(streamChannels, id)
 	})
-
-	// router.POST("/test-stream", func(c *gin.Context) {
-
-	// 	for index, channel := range streamChannels {
-
-	// 		fmt.Printf(fmt.Sprintf("sending event to id:%d\n", index))
-	// 		channel <- donations
-	// 	}
-	// })
 
 	log.Fatalf("error running HTTP server: %s\n", router.Run(":8080"))
 }
