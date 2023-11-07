@@ -16,9 +16,8 @@ body {
 }
 
 .dona {
-  color: transparent;
   filter: blur(0.3px);
-  animation: 4s ease-in-out infinite alternate rainbow;
+  animation: 10s ease-in-out infinite alternate rainbow;
 }
 
 .text-title-br-shadow {
@@ -35,6 +34,10 @@ body {
 
 .text-br-yellow-shadow {
   text-shadow: 0 3px rgb(253, 224, 71), 3px 0 rgb(253, 224, 71);
+}
+
+.text-br-black-shadow {
+  text-shadow: 0 3px rgb(0, 0, 0), 3px 0 rgb(0, 0, 0);
 }
 
 @keyframes pulse {
@@ -57,18 +60,18 @@ body {
 
 @keyframes rainbow {
   0% {
-    text-shadow: rgba(255, 255, 255, 0.9) 0 0, 0 3px rgb(192, 132, 252), 3px 0 rgb(192, 132, 252);
+    background-color: rgb(192, 132, 252);
   }
 
   33% {
-    text-shadow: rgba(146, 239, 172) 0 0, 0 3px rgb(253, 224, 71), 3px 0 rgb(253, 224, 71);
+    background-color: rgba(146, 239, 172);
   }
 
   66% {
-    text-shadow: rgb(253, 224, 71, 0.9) 0 0, 0 3px rgb(192, 132, 252), 3px 0 rgb(192, 132, 252);
+    background-color: rgb(192, 132, 252);
   }
 
   100% {
-    text-shadow: rgba(192, 132, 252, 0.9) 0 0, 0 3px rgb(255, 255, 255), 3px 0 rgb(255, 255, 255);
+    background-color: rgb(253, 224, 71, 0.9);
   }
 }
