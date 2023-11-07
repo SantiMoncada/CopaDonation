@@ -40,11 +40,14 @@ export const setUpChart = () => {
       maintainAspectRatio: false,
       scales: {
         y: {
-          stacked: true,
-        },
-        x: {
-          grid: {
-            display: false,
+          ticks: {
+            color: barColors,
+            font: {
+              weight: "900",
+            },
+            autoSkip: false,
+            maxRotation: 45,
+            minRotation: 45,
           },
         },
       },
