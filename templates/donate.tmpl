@@ -11,28 +11,46 @@
     <section class="flex justify-center px-10">
       <div class="flex flex-col justify-center items-center mt-14 gap-10">
         <div class="flex flex-col text-center gap-4">
-          <h1 class="text-5xl font-black text-yellow-300 text-title-br-shadow">MID BOOTCAMP</h1>
-          <p class="text-5xl font-semibold text-purple-400 text-br-yellow-shadow" id="countdown">
+          <h1 class="text-5xl font-black text-yellow-300 text-title-br-shadow">
+            MID BOOTCAMP
+          </h1>
+          <p
+            class="text-5xl font-semibold text-purple-400 text-br-yellow-shadow"
+            id="countdown"
+          >
             00:00:00
           </p>
         </div>
 
         <div
-          class="flex justify-center w-[80vw] border-2 border-solid border-green-300 transform rotate-2">
+          class="flex justify-center w-[80vw] border-2 border-solid border-green-300 transform rotate-2"
+        >
           <div
-            class="flex justify-center w-[80vw] p-4 border-2 border-solid border-yellow-300 transform -rotate-2">
-            <canvas id="myChart" style="width: 80%"></canvas>
+            class="flex justify-center w-[80vw] p-4 border-2 border-solid border-yellow-300 transform -rotate-2"
+          >
+            <canvas
+              data-web="{{.webTotal}}"
+              data-ux="{{.uxTotal}}"
+              data-data="{{.dataTotal}}"
+              id="myChart"
+              style="width: 80%"
+            ></canvas>
           </div>
         </div>
         <div class="flex justify-end align-middle">
-          <h2 class="text-4xl bote whitespace-nowrap">Bote: {{.total}}€</h2>
+          <h2 class="text-4xl bote whitespace-nowrap">
+            Bote: <span id="potAmount">{{.total}}</span
+            >€
+          </h2>
         </div>
 
         <a
           class="flex justify-center border-2 border-solid border-yellow-300 transform rotate-2"
-          href="https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c">
+          href="https://donate.stripe.com/test_eVa9CWfaNcsB7pm28c"
+        >
           <div
-            class="flex justify-center px-8 py-3 border-2 border-solid border-purple-400 transform -rotate-2 dona">
+            class="flex justify-center px-8 py-3 border-2 border-solid border-purple-400 transform -rotate-2 dona"
+          >
             <p class="text-4xl font-black text-white cursor">Dona aquí</p>
           </div>
         </a>
@@ -42,11 +60,19 @@
             {{
               range.donations
             }}
-            <li class="text-white w-full grid grid-cols-4 items-center gap-2 mb-2">
+            <li
+              class="text-white w-full grid grid-cols-4 items-center gap-2 mb-2"
+            >
               <div class="col-span-1">
-                {{if eq .Bootcamp "web"}}<span class="text-yellow-300">{{.Name}}</span
-                >: {{else if eq .Bootcamp "ux"}}<span class="text-purple-400">{{.Name}}</span
-                >: {{else}} <span class="text-green-300">{{.Name}}</span
+                {{if eq .Bootcamp "web"
+
+                }}<span class="text-yellow-300">{{.Name}}</span
+                >:
+                {{else if eq .Bootcamp "ux"
+
+                }}<span class="text-purple-400">{{.Name}}</span
+                >: {{else if eq .Bootcamp "data"}}
+                <span class="text-green-300">{{.Name}}</span
                 >:{{ end }}
               </div>
 

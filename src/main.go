@@ -16,6 +16,12 @@ var donations []donation
 
 var total float64 = 0
 
+var webTotal float64 = 0
+
+var uxTotal float64 = 0
+
+var dataTotal float64 = 0
+
 var streamChannels = make(map[uuid.UUID]chan donation)
 
 func main() {
@@ -33,16 +39,26 @@ func main() {
 
 	donations = getAllDonations()
 
-	fmt.Printf("%v\n", donations)
-
 	for _, donation := range donations {
 		total += donation.AmountNumber
+
+		switch donation.Bootcamp {
+		case "web":
+			webTotal += donation.AmountNumber
+		case "ux":
+			uxTotal += donation.AmountNumber
+		case "data":
+			dataTotal += donation.AmountNumber
+		}
 	}
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "donate.tmpl", gin.H{
 			"donations": donations,
 			"total":     fmt.Sprintf("%.2f", total),
+			"webTotal":  webTotal,
+			"uxTotal":   uxTotal,
+			"dataTotal": dataTotal,
 		})
 	})
 
@@ -62,9 +78,21 @@ func main() {
 		donations = append([]donation{newDonation}, donations...)
 		total += newDonation.AmountNumber
 
+		switch newDonation.Bootcamp {
+		case "web":
+			webTotal += newDonation.AmountNumber
+		case "ux":
+			uxTotal += newDonation.AmountNumber
+		case "data":
+			dataTotal += newDonation.AmountNumber
+		}
+
 		c.HTML(http.StatusCreated, "donate.tmpl", gin.H{
 			"donations": donations,
 			"total":     fmt.Sprintf("%.2f", total),
+			"webTotal":  webTotal,
+			"uxTotal":   uxTotal,
+			"dataTotal": dataTotal,
 		})
 
 		for _, channel := range streamChannels {

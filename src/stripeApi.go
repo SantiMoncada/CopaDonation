@@ -7,7 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"sync"
+	"strings"
 )
 
 const baseApi = "https://api.stripe.com/v1"
@@ -79,7 +79,7 @@ func (cs *checkoutSession) ToDonation() donation {
 	donation.Amount = fmt.Sprintf("%.2f", float64(cs.Amount)/100)
 	donation.AmountNumber = float64(cs.Amount) / 100
 
-	donation.Name = cs.CustomerDetails.Name
+	donation.Name = strings.Fields(cs.CustomerDetails.Name)[0]
 	donation.Currency = cs.Currency
 
 	return donation
@@ -88,7 +88,7 @@ func (cs *checkoutSession) ToDonation() donation {
 
 func getPaymentIntents() []paymentIntent {
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/payment_intents", baseApi), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/payment_intents?limit=100", baseApi), nil)
 
 	if err != nil {
 		log.Fatal("Error creating request:")
@@ -144,8 +144,6 @@ func getSessionData(id string) (checkoutSession, error) {
 
 	json.Unmarshal(responseData, &jsonResponse)
 
-	fmt.Printf("%v\n", jsonResponse)
-
 	if len(jsonResponse.Data) < 1 {
 		return checkoutSession{}, errors.New("no checkout found")
 	}
@@ -155,36 +153,51 @@ func getSessionData(id string) (checkoutSession, error) {
 
 func getAllDonations() []donation {
 
-	var WaitGroup sync.WaitGroup
-	var sessions []checkoutSession
+	// Cant  do this calls in parallel cuz stripe gets blocked
 
-	getDonationThread := func(id string, index int) {
+	// var WaitGroup sync.WaitGroup
+	// var sessions []checkoutSession
 
-		checkoutSession, err := getSessionData(id)
-		if err == nil {
-			sessions[index] = checkoutSession
-		}
+	// getDonationThread := func(id string, index int) {
 
-		WaitGroup.Done()
-	}
+	// 	checkoutSession, err := getSessionData(id)
+	// 	if err == nil {
+	// 		sessions[index] = checkoutSession
+	// 	}
+
+	// 	WaitGroup.Done()
+	// }
+
+	// intents := getPaymentIntents()
+
+	// sessions = make([]checkoutSession, len(intents))
+
+	// WaitGroup.Add(len(intents))
+
+	// for index, intent := range intents {
+	// 	go getDonationThread(intent.Id, index)
+	// }
+
+	// WaitGroup.Wait()
+
+	// var output []donation
+
+	// for _, session := range sessions {
+	// 	output = append(output, session.ToDonation())
+	// }
+
+	var donations []donation
 
 	intents := getPaymentIntents()
 
-	sessions = make([]checkoutSession, len(intents))
+	for _, intent := range intents {
+		session, err := getSessionData(intent.Id)
 
-	WaitGroup.Add(len(intents))
-
-	for index, intent := range intents {
-		go getDonationThread(intent.Id, index)
+		if err == nil {
+			fmt.Printf("%v\n", session.ToDonation())
+			donations = append(donations, session.ToDonation())
+		}
 	}
 
-	WaitGroup.Wait()
-
-	var output []donation
-
-	for _, session := range sessions {
-		output = append(output, session.ToDonation())
-	}
-
-	return output
+	return donations
 }
