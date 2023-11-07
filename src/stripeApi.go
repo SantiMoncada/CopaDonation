@@ -11,7 +11,6 @@ import (
 )
 
 const baseApi = "https://api.stripe.com/v1"
-const stripeKey = "rk_test_51O3hRaJQy7oGudPMNpcZFOWzma0AE5zyF1290grVx7u12LvjQAofzO9iwPUS6GXoWuttVqgSyZIC8fPI4zPDd3US00GIXtBJtL"
 
 type stripeResponse[T any] struct {
 	Object  string `json:"object"`

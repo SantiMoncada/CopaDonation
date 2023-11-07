@@ -2,6 +2,6 @@
 **/.DS_Store
 #JS
 node_modules
-# public/dist
+public/dist
 #GO
 ServerExecutable
