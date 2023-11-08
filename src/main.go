@@ -133,5 +133,5 @@ func main() {
 		delete(streamChannels, id)
 	})
 
-	log.Fatalf("error running HTTP server: %s\n", router.Run(":8080"))
+	log.Fatalf("error running HTTP server: %s\n", router.Run(":3000"))
 }
