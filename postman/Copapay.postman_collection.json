@@ -1,0 +1,40 @@
+{
+    "info": {
+        "_postman_id": "3a01058f-82a7-43a3-8fb5-cb1c4e0538d1",
+        "name": "Copapay",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "31044606"
+    },
+    "item": [
+        {
+            "name": "Simulate stripe webhook",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\r\n  \"created\": 1636373627,\r\n  \"data\": {\r\n    \"object\": {\r\n      \"id\": \"cs_test_sessionid123\",\r\n      \"amount_total\": 2000,\r\n      \"created\": 1636373627,\r\n      \"currency\": \"eur\",\r\n      \"custom_fields\": [\r\n        {\r\n          \"dropdown\": {\r\n            \"value\": \"web\"\r\n          },\r\n          \"key\": \"bootcamp\"\r\n        },\r\n        {\r\n          \"key\": \"messageforthefeed\",\r\n          \"text\": {\r\n            \"value\": \"postman message\"\r\n          }\r\n        }\r\n      ],\r\n      \"customer_details\": {\r\n        \"name\": \"John Doe\",\r\n        \"email\": \"johndoe@example.com\"\r\n      }\r\n    }\r\n  }\r\n}\r\n",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "localhost:3000/webhook",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "3000",
+                    "path": [
+                        "webhook"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
