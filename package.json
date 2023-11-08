@@ -1,7 +1,7 @@
 {
-  "name": "copadonation",
+  "name": "copapay",
   "version": "1.0.0",
-  "description": "Scripts for copadonation templates",
+  "description": "Scripts for copapay templates",
   "main": "index.js",
   "directories": {
     "doc": "docs"

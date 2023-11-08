@@ -1,4 +1,4 @@
-module github.com/SantiMoncada/CopaDonation
+module github.com/SantiMoncada/CopaPay
 
 go 1.21.3
 
