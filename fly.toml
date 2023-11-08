@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for copapay on 2023-11-08T01:07:56+01:00
+# fly.toml app configuration file generated for copadonation on 2023-11-08T19:00:23+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "copapay"
+app = "copadonation"
 primary_region = "mad"
 
 [build]
