@@ -37,6 +37,6 @@ COPY --from=node_builder /app/public/dist /app/public/dist
 WORKDIR /app
 
 # Expose any necessary ports
-EXPOSE 8080
+EXPOSE 3000
 # Define the startup command for your application
 CMD ["./ServerExecutable", "release"]

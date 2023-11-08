@@ -1,0 +1,9 @@
+# flyctl launch added from .gitignore
+#OSX
+**/**/.DS_Store
+#JS
+**/node_modules
+**/public/dist
+#GO
+**/ServerExecutable
+fly.toml
