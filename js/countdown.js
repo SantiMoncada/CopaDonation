@@ -1,7 +1,7 @@
 //@ts-check
 export default () => {
-  //date for November 9, 2023, 4:00 PM spain in UTC
-  var partyDate = new Date(Date.UTC(2023, 10, 9, 14, 0, 0));
+  //date for November 10, 2023, 4:00 PM spain in UTC
+  var partyDate = new Date(Date.UTC(2023, 10, 10, 14, 0, 0));
 
   const SECOND = 1000;
   const MINUTE = SECOND * 60;
@@ -13,11 +13,11 @@ export default () => {
     var distance = partyDate.getTime() - now.getTime();
     if (distance < 0) {
       clearInterval(timer);
-      const cd = document.getElementById('countdown');
+      const cd = document.getElementById("countdown");
 
       if (cd === null) return;
 
-      cd.innerHTML = 'PARTY!';
+      cd.innerHTML = "PARTY!";
       return;
     }
 
@@ -25,15 +25,15 @@ export default () => {
     const minutes = Math.floor((distance % HOUR) / MINUTE);
     const seconds = Math.floor((distance % MINUTE) / SECOND);
 
-    const cd = document.getElementById('countdown');
+    const cd = document.getElementById("countdown");
     if (cd === null) return;
 
     const minutesLocal = minutes.toLocaleString(undefined, {
-      minimumIntegerDigits: 2
+      minimumIntegerDigits: 2,
     });
 
     const secondsLocal = seconds.toLocaleString(undefined, {
-      minimumIntegerDigits: 2
+      minimumIntegerDigits: 2,
     });
 
     cd.innerText = `${hours}:${minutesLocal}:${secondsLocal}`;
