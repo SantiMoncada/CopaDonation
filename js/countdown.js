@@ -8,16 +8,21 @@ export default () => {
   const HOUR = MINUTE * 60;
   const DAY = HOUR * 24;
 
+  const timer = setInterval(updateTimer, 1000);
+
+  updateTimer();
+
   function updateTimer() {
     var now = new Date();
     var distance = partyDate.getTime() - now.getTime();
     if (distance < 0) {
-      clearInterval(timer);
       const cd = document.getElementById("countdown");
 
       if (cd === null) return;
 
       cd.innerHTML = "PARTY!";
+
+      clearInterval(timer);
       return;
     }
 
@@ -38,7 +43,4 @@ export default () => {
 
     cd.innerText = `${hours}:${minutesLocal}:${secondsLocal}`;
   }
-
-  updateTimer();
-  const timer = setInterval(updateTimer, 1000);
 };
