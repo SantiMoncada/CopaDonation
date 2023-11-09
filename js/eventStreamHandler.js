@@ -38,7 +38,9 @@ export default (chart) => {
     <span class="${colorName}">${name}</span>
   </div>
 
-  <div class="text-white text-center col-span-1">${amount}€</div>
+  <div class="text-white text-center col-span-1">${parseFloat(amount).toFixed(
+    2
+  )}€</div>
 
   <div class="text-white col-span-2">${message}</div>
 </li>
