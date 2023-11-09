@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const baseApi = "https://api.stripe.com/v1"
@@ -87,11 +88,20 @@ func (cs *checkoutSession) ToDonation() donation {
 
 func getPaymentIntents() []paymentIntent {
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/payment_intents?limit=100", baseApi), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/payment_intents", baseApi), nil)
 
 	if err != nil {
 		log.Fatal("Error creating request:")
 	}
+
+	date := "2023-11-07T00:00:00Z"
+	t, _ := time.Parse(time.RFC3339, date)
+
+	q := req.URL.Query()
+	q.Add("limit", "100")
+	q.Add("created[gt]", fmt.Sprintf("%d", t.Unix()))
+
+	req.URL.RawQuery = q.Encode()
 
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", stripeKey))
 
