@@ -87,7 +87,7 @@ func (cs *checkoutSession) ToDonation() donation {
 
 func getPaymentIntents() []paymentIntent {
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/payment_intents?limit=100", baseApi), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/payment_intents?limit=4", baseApi), nil)
 
 	if err != nil {
 		log.Fatal("Error creating request:")

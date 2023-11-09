@@ -133,5 +133,15 @@ func main() {
 		delete(streamChannels, id)
 	})
 
+	router.GET("api/data", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"total":     total,
+			"webTotal":  webTotal,
+			"uxTotal":   uxTotal,
+			"dataTotal": dataTotal,
+			"donations": donations,
+		})
+	})
+
 	log.Fatalf("error running HTTP server: %s\n", router.Run(":3000"))
 }
