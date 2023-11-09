@@ -32,15 +32,17 @@ export default (chart) => {
         break;
     }
 
-    const listElement = `<li class="text-white w-full grid grid-cols-4 items-center gap-2 mb-2">
-<div class="col-span-1">
-  <span class="${colorName}">${name}</span>
-</div>
+    const listElement = `
+<li class="grid grid-cols-4 gap-2 mb-4">
+  <div class="col-span-1 break-words">
+    <span class="${colorName}">${name}</span>
+  </div>
 
-<div class="text-center col-span-1">${amount}€</div>
-  <div class="col-span-2">${message}</div>
-</li>`;
+  <div class="text-white text-center col-span-1">${amount}€</div>
 
+  <div class="text-white col-span-2">${message}</div>
+</li>
+`;
     li.innerHTML = listElement;
     return li;
   };
