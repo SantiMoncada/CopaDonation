@@ -12,100 +12,103 @@
     <figure class="absolute top-3 right-3 transform rotate-12">
       <img class="w-32" src="./../public/copapay-logo.svg" alt="CopaPay Logo" />
     </figure>
-    <section class="flex justify-center px-3">
-      <div class="flex flex-col justify-center max-w-xl lg:max-w-none mt-20 gap-12 lg:gap-20">
-        <div class="flex flex-col text-center gap-4">
-          <h1 class="text-5xl font-black text-yellow-300 text-title-br-shadow">MID BOOTCAMP</h1>
-          <p class="text-5xl font-semibold text-purple-400 text-br-yellow-shadow" id="countdown">
-            00:00:00
-          </p>
-        </div>
-
-        <div class="flex flex-col lg:flex-row lg:justify-between gap-12 lg:gap-36">
-          <div class="flex flex-col lg:flex-col-reverse lg:justify-end lg:w-[50%] gap-12 lg:gap-8">
-            <div class="flex flex-col gap-6 lg:gap-2">
-              <div>
-                <h2 class="text-center text-white text-2xl text-bold">
-                  Convierte tu dinero en alcohol
-                </h2>
-              </div>
-
-              <div class="flex justify-center items-center lg:hidden">
-                <a
-                  class="w-[90%] border-2 border-solid border-yellow-300 transform rotate-2"
-                  href="{{.donateLink}}">
-                  <div
-                    class="w-[100%] px-8 py-3 border-2 border-solid border-purple-400 transform -rotate-2 dona">
-                    <p class="text-center text-3xl font-black text-white cursor">INVIERTE AQUÍ</p>
-                  </div>
-                </a>
-              </div>
-
-              <div class="relative hidden lg:flex lg:justify-center">
-                <a href="{{.donateLink}}">
-                  <img
-                    class="w-64"
-                    src="./../public/qr-code.svg"
-                    alt="qr-code"
-                    href="{{.donateLink}}" />
-                </a>
-                <div class="absolute right-20 bottom-3 flex flex-col justify-end">
-                  <img class="w-20" src="./../public/curly-arrow.svg" alt="curly-arrow" />
-                  <p class="text-white text-xl font-medium">Clíckame!</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="flex flex-col gap-12 lg:gap-8">
-              <div class="flex justify-center">
-                <div class="w-[90%] border-2 border-solid border-green-300 transform rotate-2">
-                  <div
-                    class="w-[100%] p-4 border-2 border-solid border-yellow-300 transform -rotate-2">
-                    <canvas
-                      data-web="{{.webTotal}}"
-                      data-ux="{{.uxTotal}}"
-                      data-data="{{.dataTotal}}"
-                      id="myChart"
-                      style="width: 80%"></canvas>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-center">
-                <div class="w-[90%] text-center align-middle">
-                  <h2 class="text-4xl bote whitespace-nowrap">
-                    BOTE: <span id="potAmount">{{.total}}</span
-                    >€
-                  </h2>
-                </div>
-              </div>
-            </div>
+    <section class="w-full">
+      <div class="flex justify-center px-3">
+        <div class="flex flex-col justify-center max-w-xl lg:max-w-none mt-20 gap-12 lg:gap-20">
+          <div class="flex flex-col text-center gap-4">
+            <h1 class="text-5xl font-black text-yellow-300 text-title-br-shadow">MID BOOTCAMP</h1>
+            <p class="text-5xl font-semibold text-purple-400 text-br-yellow-shadow" id="countdown">
+              00:00:00
+            </p>
           </div>
 
-          <div class="w-full lg:w-[50%]">
-            <ul id="listOfDontaions" class="flex flex-col">
-              {{
-                range.donations
-              }}
-              <li class="grid grid-cols-4 gap-2 mb-4">
-                <div class="col-span-1 break-words">
-                  {{if eq .Bootcamp "web"}}
-                  <span class="text-yellow-300">{{.Name}}</span>
-                  {{else if eq .Bootcamp "ux"}}
-                  <span class="text-purple-400">{{.Name}}</span>
-                  {{else if eq .Bootcamp "data"}}
-                  <span class="text-green-300">{{.Name}}</span>
-                  {{ end }}
+          <div class="flex flex-col lg:flex-row lg:justify-between gap-12 lg:gap-36">
+            <div
+              class="flex flex-col lg:flex-col-reverse lg:justify-end lg:w-[50%] gap-12 lg:gap-8">
+              <div class="flex flex-col gap-6 lg:gap-2">
+                <div>
+                  <h2 class="text-center text-white text-2xl text-bold">
+                    Convierte tu dinero en alcohol
+                  </h2>
                 </div>
 
-                <div class="text-white text-center col-span-1">{{.Amount}}€</div>
+                <div class="flex justify-center items-center lg:hidden">
+                  <a
+                    class="w-[90%] border-2 border-solid border-yellow-300 transform rotate-2"
+                    href="{{.donateLink}}">
+                    <div
+                      class="w-[100%] px-8 py-3 border-2 border-solid border-purple-400 transform -rotate-2 dona">
+                      <p class="text-center text-3xl font-black text-white cursor">INVIERTE AQUÍ</p>
+                    </div>
+                  </a>
+                </div>
 
-                <div class="text-white col-span-2">{{.Message}}</div>
-              </li>
-              {{
-                end
-              }}
-            </ul>
+                <div class="relative hidden lg:flex lg:justify-center">
+                  <a href="{{.donateLink}}">
+                    <img
+                      class="w-64"
+                      src="./../public/qr-code.svg"
+                      alt="qr-code"
+                      href="{{.donateLink}}" />
+                  </a>
+                  <!-- <div class="absolute right-20 bottom-3 flex flex-col justify-end">
+                  <img class="w-20" src="./../public/curly-arrow.svg" alt="curly-arrow" />
+                  <p class="text-white text-xl font-medium">Clíckame!</p>
+                </div> -->
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-12 lg:gap-8">
+                <div class="flex justify-center">
+                  <div class="w-[90%] border-2 border-solid border-green-300 transform rotate-2">
+                    <div
+                      class="w-[100%] p-4 border-2 border-solid border-yellow-300 transform -rotate-2">
+                      <canvas
+                        data-web="{{.webTotal}}"
+                        data-ux="{{.uxTotal}}"
+                        data-data="{{.dataTotal}}"
+                        id="myChart"
+                        style="width: 80%"></canvas>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex justify-center">
+                  <div class="w-[90%] text-center align-middle">
+                    <h2 class="text-4xl bote whitespace-nowrap">
+                      BOTE: <span id="potAmount">{{.total}}</span
+                      >€
+                    </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full lg:w-[50%]">
+              <ul id="listOfDontaions" class="flex flex-col">
+                {{
+                  range.donations
+                }}
+                <li class="grid grid-cols-4 gap-2 mb-4">
+                  <div class="col-span-1 break-words">
+                    {{if eq .Bootcamp "web"}}
+                    <span class="text-yellow-300">{{.Name}}</span>
+                    {{else if eq .Bootcamp "ux"}}
+                    <span class="text-purple-400">{{.Name}}</span>
+                    {{else if eq .Bootcamp "data"}}
+                    <span class="text-green-300">{{.Name}}</span>
+                    {{ end }}
+                  </div>
+
+                  <div class="text-white text-center col-span-1">{{.Amount}}€</div>
+
+                  <div class="text-white col-span-2">{{.Message}}</div>
+                </li>
+                {{
+                  end
+                }}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
