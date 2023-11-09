@@ -59,7 +59,7 @@ export default (chart) => {
           //update the total
           const pot = document.getElementById("potAmount");
           if (pot != null) {
-            pot.innerText = total;
+            pot.innerText = parseFloat(total).toFixed(2);
           }
 
           //update the chart
