@@ -41,9 +41,19 @@
                 </a>
               </div>
 
-              <figure class="hidden lg:flex lg:justify-center">
-                <img class="w-64" src="./../public/qr-code.svg" alt="qr-code" />
-              </figure>
+              <div class="relative hidden lg:flex lg:justify-center">
+                <a href="{{.donateLink}}">
+                  <img
+                    class="w-64"
+                    src="./../public/qr-code.svg"
+                    alt="qr-code"
+                    href="{{.donateLink}}" />
+                </a>
+                <div class="absolute right-20 bottom-3 flex flex-col justify-end">
+                  <img class="w-20" src="./../public/curly-arrow.svg" alt="curly-arrow" />
+                  <p class="text-white text-xl font-medium">Clíckame!</p>
+                </div>
+              </div>
             </div>
 
             <div class="flex flex-col gap-12 lg:gap-8">
