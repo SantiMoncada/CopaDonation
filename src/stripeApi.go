@@ -34,11 +34,12 @@ type paymentIntent struct {
 }
 
 type checkoutSession struct {
-	Id           string `json:"id"`
-	Amount       int    `json:"amount_total"`
-	Created      int    `json:"created"`
-	Currency     string `json:"currency"`
-	CustomFields []struct {
+	Id            string `json:"id"`
+	Amount        int    `json:"amount_total"`
+	Created       int    `json:"created"`
+	Currency      string `json:"currency"`
+	PaymentStatus string `json:"payment_status"`
+	CustomFields  []struct {
 		Key      string `json:"key"`
 		Dropdown struct {
 			Value string `json:"value"`
@@ -79,7 +80,10 @@ func (cs *checkoutSession) ToDonation() donation {
 	donation.Amount = fmt.Sprintf("%.2f", float64(cs.Amount)/100)
 	donation.AmountNumber = float64(cs.Amount) / 100
 
-	donation.Name = strings.Fields(cs.CustomerDetails.Name)[0]
+	if cs.CustomerDetails.Name != "" {
+		donation.Name = strings.Fields(cs.CustomerDetails.Name)[0]
+	}
+
 	donation.Currency = cs.Currency
 
 	return donation
@@ -157,10 +161,28 @@ func getSessionData(id string) (checkoutSession, error) {
 		return checkoutSession{}, errors.New("no checkout found")
 	}
 
+	if jsonResponse.Data[0].PaymentStatus != "paid" {
+		return checkoutSession{}, errors.New("Status not paid")
+	}
+
 	return jsonResponse.Data[0], nil
 }
 
 func getAllDonations() []donation {
+	var donations []donation
+
+	intents := getPaymentIntents()
+
+	for _, intent := range intents {
+		session, err := getSessionData(intent.Id)
+
+		if err == nil {
+			fmt.Printf("%v\n", session.ToDonation())
+			donations = append(donations, session.ToDonation())
+		}
+	}
+
+	return donations
 
 	// Cant  do this calls in parallel cuz stripe gets blocked
 
@@ -194,19 +216,4 @@ func getAllDonations() []donation {
 	// for _, session := range sessions {
 	// 	output = append(output, session.ToDonation())
 	// }
-
-	var donations []donation
-
-	intents := getPaymentIntents()
-
-	for _, intent := range intents {
-		session, err := getSessionData(intent.Id)
-
-		if err == nil {
-			fmt.Printf("%v\n", session.ToDonation())
-			donations = append(donations, session.ToDonation())
-		}
-	}
-
-	return donations
 }
