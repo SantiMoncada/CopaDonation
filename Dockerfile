@@ -2,9 +2,14 @@
 FROM golang:1.21.3 AS go_builder
 
 WORKDIR /app
-COPY . /app
 
-RUN go mod tidy
+COPY go.mod /app
+
+COPY go.sum /app
+
+RUN go mod download
+
+COPY . /app
 
 RUN go build -o ServerExecutable src/*.go
 
@@ -13,9 +18,13 @@ FROM node:18.18.2 AS node_builder
 
 WORKDIR /app
 
-COPY . /app
+COPY package.json /app
+
+COPY package-lock.json /app
 
 RUN npm install
+
+COPY . /app
 
 RUN npm run webpack:build
 # Stage 3: Create a final image
